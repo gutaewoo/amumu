@@ -238,7 +238,20 @@ namespace AmumuSharp
 
         }
 
+        void RegulateWState(bool ignoreTargetChecks = false)
+        {
+            if (!_spellW.IsReady() || ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 2)
+                return;
 
+            var target = TargetSelector.GetTarget(_spellW.Range, TargetSelector.DamageType.Magical);
+            var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, _spellW.Range, MinionTypes.All, MinionTeam.NotAlly);
+
+            if (!ignoreTargetChecks && (target != null || (!_comboW && minions.Count != 0)))
+                return;
+
+            ;
+            _comboW = false;
+        }
 
         void CastQ(Obj_AI_Base target, HitChance hitChance = HitChance.High)
         {
