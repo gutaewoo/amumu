@@ -249,7 +249,7 @@ namespace AmumuSharp
 
             var target = TargetSelector.GetTarget(_spellW.Range, TargetSelector.DamageType.Magical);
 
-            if (!ignoreTargetChecks && (target != null || (!_comboW && != 0)))
+            if (!ignoreTargetChecks && (target != null || (!_comboW = 0)))
                 return;
 
             _spellW.Cast();
