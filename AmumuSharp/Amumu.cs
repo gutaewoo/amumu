@@ -248,8 +248,9 @@ namespace AmumuSharp
                 return;
 
             var target = TargetSelector.GetTarget(_spellW.Range, TargetSelector.DamageType.Magical);
+            var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, _spellW.Range, MinionTypes.All, MinionTeam.NotAlly);
 
-            if (!ignoreTargetChecks && (target != null || (!_comboW = 0)))
+            if (!ignoreTargetChecks && (target != null || (!_comboW && minions.Count != 0)))
                 return;
 
             _spellW.Cast();
