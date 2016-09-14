@@ -57,7 +57,7 @@ namespace AmumuSharp
             miscMenu.AddItem(new MenuItem("aimQ" + ObjectManager.Player.ChampionName, "Q near mouse").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
             miscMenu.AddItem(new MenuItem("packetCast", "Packet Cast").SetValue(true));
 
-            _spellQ = new Spell(SpellSlot.Q, 1080);
+            _spellQ = new Spell(SpellSlot.Q, 1070);
             _spellW = new Spell(SpellSlot.W, 300);
             _spellE = new Spell(SpellSlot.E, 350);
             _spellR = new Spell(SpellSlot.R, 550);
@@ -236,6 +236,10 @@ namespace AmumuSharp
 
             var enoughMana = GetManaPercent() > _menu.Item("farmWPercent" + ObjectManager.Player.ChampionName).GetValue<Slider>().Value;
 
+            if (enoughMana && ((minions.Count >= 3 || anyJungleMobs) && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1))
+                _spellW.Cast();
+            else if (!enoughMana || ((minions.Count <= 2 && !anyJungleMobs) && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2))
+                RegulateWState(!enoughMana);
         }
 
         void RegulateWState(bool ignoreTargetChecks = false)
@@ -244,12 +248,11 @@ namespace AmumuSharp
                 return;
 
             var target = TargetSelector.GetTarget(_spellW.Range, TargetSelector.DamageType.Magical);
-            var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, _spellW.Range, MinionTypes.All, MinionTeam.NotAlly);
 
             if (!ignoreTargetChecks && (target != null || (!_comboW && minions.Count != 0)))
                 return;
 
-            ;
+            _spellW.Cast();
             _comboW = false;
         }
 
