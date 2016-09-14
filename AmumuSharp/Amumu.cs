@@ -62,10 +62,10 @@ namespace AmumuSharp
             _spellE = new Spell(SpellSlot.E, 350);
             _spellR = new Spell(SpellSlot.R, 550);
 
-            _spellQ.SetSkillshot(.25f, 90, 2000, true, SkillshotType.SkillshotLine);  //check delay
+            _spellQ.SetSkillshot(0.25f, 90, 2000, true, SkillshotType.SkillshotLine);  //check delay
             _spellW.SetSkillshot(0f, _spellW.Range, float.MaxValue, false, SkillshotType.SkillshotCircle); //correct
-            _spellE.SetSkillshot(.5f, _spellE.Range, float.MaxValue, false, SkillshotType.SkillshotCircle); //check delay
-            _spellR.SetSkillshot(.25f, _spellR.Range, float.MaxValue, false, SkillshotType.SkillshotCircle); //check delay
+            _spellE.SetSkillshot(0.5f, _spellE.Range, float.MaxValue, false, SkillshotType.SkillshotCircle); //check delay
+            _spellR.SetSkillshot(0.25f, _spellR.Range, float.MaxValue, false, SkillshotType.SkillshotCircle); //check delay
 
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += Game_OnUpdate;
@@ -236,10 +236,6 @@ namespace AmumuSharp
 
             var enoughMana = GetManaPercent() > _menu.Item("farmWPercent" + ObjectManager.Player.ChampionName).GetValue<Slider>().Value;
 
-            if (enoughMana && ((minions.Count >= 3 || anyJungleMobs) && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1))
-                _spellW.Cast();
-            else if (!enoughMana || ((minions.Count <= 2 && !anyJungleMobs) && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2))
-                RegulateWState(!enoughMana);
         }
 
         void RegulateWState(bool ignoreTargetChecks = false)
